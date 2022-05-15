@@ -4,9 +4,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("835868dcd17131ba8b9619d14c67c127aa18b90a82438c8613586331129dda63" default))
+   '("3319c893ff355a88b86ef630a74fad7f1211f006d54ce451aab91d35d018158f" "835868dcd17131ba8b9619d14c67c127aa18b90a82438c8613586331129dda63" default))
  '(package-selected-packages
-   '(treemacs-projectile treemacs dashboard projectile helm doom-modeline doom-themes which-key use-package)))
+   '(magit modern-cpp-font-lock yasnippet-snippets treemacs-projectile treemacs dashboard projectile helm doom-modeline doom-themes which-key use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -94,3 +94,48 @@
 (use-package treemacs-projectile
   :after treemacs projectile
   :ensure t)
+
+;; Add yasnippet for dropdown
+(require 'yasnippet)
+(yas-global-mode 1)
+
+;; Autocompletion
+(use-package auto-complete
+  :ensure t
+  :init
+  (progn
+    (ac-config-default)
+    (global-auto-complete-mode t)
+    ))
+
+;; Flycheck syntax checking
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t)
+  )
+
+;; Syntax highlighting
+(use-package modern-cpp-font-lock
+  :ensure t)
+
+;; Magit git client
+(use-package magit
+  :ensure t
+  :init
+  (progn
+    (bind-key "C-x g" 'magit-status)))
+
+;; Custom C++ compile function and debugger
+(defun code-compile ()
+  (interactive)
+  (unless (file-exists-p "Makefile")
+    (set (make-local-variable 'compile-command)
+     (let ((file (file-name-nondirectory buffer-file-name)))
+       (format "%s -o %s %s"
+           (if  (equal (file-name-extension file) "cpp") "g++" "gcc" )
+           (file-name-sans-extension file)
+           file)))
+    (compile compile-command)))
+
+(global-set-key [f9] 'code-compile)
