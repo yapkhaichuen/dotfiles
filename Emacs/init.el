@@ -6,7 +6,7 @@
  '(custom-safe-themes
    '("3319c893ff355a88b86ef630a74fad7f1211f006d54ce451aab91d35d018158f" "835868dcd17131ba8b9619d14c67c127aa18b90a82438c8613586331129dda63" default))
  '(package-selected-packages
-   '(magit modern-cpp-font-lock yasnippet-snippets treemacs-projectile treemacs dashboard projectile helm doom-modeline doom-themes which-key use-package)))
+   '(flycheck auto-complete magit modern-cpp-font-lock yasnippet-snippets treemacs-projectile treemacs dashboard projectile helm doom-modeline doom-themes which-key use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -25,117 +25,5 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(use-package which-key
-  :ensure t
-  :config (which-key-mode))
-
-(use-package doom-themes
-  :ensure t
-  :config
-  (load-theme 'doom-one))
-
-(use-package doom-modeline
-  :ensure t
-  :hook (after-init . doom-modeline-mode))
-
-(use-package all-the-icons
-  :ensure t)
-
-;; Dont show startup msg
-(setq inhibit-startup-message t)
-
-;; Dont show tool bar
-(tool-bar-mode -1)
-
-;; Dont show scroll bar
-(toggle-scroll-bar -1)
-
-;; Show matching parenthesis
-(show-paren-mode 1)
-
-;; Use IDO mode
-(setq ido-everywhere t)
-(ido-mode t)
-
-;; Projectile
-(use-package projectile
-  :ensure t
-  :config
-  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
-  (projectile-mode +1))
-
-;; Dashboard
-(use-package dashboard
-  :ensure t
-  :init
-  (progn
-    (setq dashboard-items '((recents . 3)
-                            (projects . 3)))
-    (setq dashboard-startup-banner 'logo)
-    (setq dashboard-set-file-icons t)
-    (setq dashboard-set-heading-icons t)
-   )
-  :config
-  (dashboard-setup-startup-hook))
-
-;; Treemacs
-(use-package treemacs
-  :ensure t
-  :bind
-  (:map global-map
-	([f8] . treemacs)
-	("C-<f8>". treemacs-select-wwindow))
-  :config
-  (progn
-    (setq treemacs-is-never-other-window t))
-  )
-
-;; Treemacs Projectile
-(use-package treemacs-projectile
-  :after treemacs projectile
-  :ensure t)
-
-;; Add yasnippet for dropdown
-(require 'yasnippet)
-(yas-global-mode 1)
-
-;; Autocompletion
-(use-package auto-complete
-  :ensure t
-  :init
-  (progn
-    (ac-config-default)
-    (global-auto-complete-mode t)
-    ))
-
-;; Flycheck syntax checking
-(use-package flycheck
-  :ensure t
-  :init
-  (global-flycheck-mode t)
-  )
-
-;; Syntax highlighting
-(use-package modern-cpp-font-lock
-  :ensure t)
-
-;; Magit git client
-(use-package magit
-  :ensure t
-  :init
-  (progn
-    (bind-key "C-x g" 'magit-status)))
-
-;; Custom C++ compile function and debugger
-(defun code-compile ()
-  (interactive)
-  (unless (file-exists-p "Makefile")
-    (set (make-local-variable 'compile-command)
-     (let ((file (file-name-nondirectory buffer-file-name)))
-       (format "%s -o %s %s"
-           (if  (equal (file-name-extension file) "cpp") "g++" "gcc" )
-           (file-name-sans-extension file)
-           file)))
-    (compile compile-command)))
-
-(global-set-key [f9] 'code-compile)
+;; Org file will generate and compile the emacs-lisp init
+(org-babel-load-file (expand-file-name "~/.emacs.d/my-tut.org"))
