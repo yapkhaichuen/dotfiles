@@ -119,6 +119,9 @@ My Config File
    (progn
    (setq treemacs-is-never-other-window t))
    )
+
+   (require 'treemacs-all-the-icons)
+   (treemacs-load-theme "all-the-icons")
    #+END_SRC
 
 ** Treemacs-projectile
@@ -167,4 +170,18 @@ My Config File
    #+BEGIN_SRC emacs-lisp
    (use-package modern-cpp-font-lock
      :ensure t)
+   #+END_SRC
+
+** Centaur tabs
+   #+BEGIN_SRC emacs-lisp
+   (use-package centaur-tabs
+     :ensure t
+     :config
+       (setq centaur-tabs-set-bar 'over
+             centaur-tabs-set-icons t
+	     centaur-tabs-gray-out-icons 'buffer
+	     centaur-tabs-height 24
+	     centaur-tabs-set-modified-marker t
+	     centaur-tabs-modifier-marker "*")
+	(centaur-tabs-mode t))
    #+END_SRC
