@@ -1,0 +1,170 @@
+My Config File
+
+* General Settings
+** Don't show startup message
+   #+BEGIN_SRC emacs-lisp
+   (setq inhibit-startup-message t)
+   #+END_SRC
+
+** Don't show tool bar
+   #+BEGIN_SRC emacs-lisp
+   (tool-bar-mode -1)
+   #+END_SRC
+
+** Don't show scroll bar
+   #+BEGIN_SRC emacs-lisp
+   (toggle-scroll-bar -1)
+   #+END_SRC
+
+** Show matching parenthesis
+   #+BEGIN_SRC emacs-lisp
+   (show-paren-mode 1)
+   #+END_SRC
+
+** Use IDO mode
+   #+BEGIN_SRC emacs-lisp
+   (setq ido-everywhere t)
+   (ido-mode t)
+   #+END_SRC
+
+** Display line numbers
+   #+BEGIN_SRC emacs-lisp
+   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+   #+END_SRC
+
+
+* UI
+** Doom themes - doom-one
+   #+BEGIN_SRC emacs-lisp
+   (use-package doom-themes
+     :ensure t
+     :config
+     (load-theme 'doom-one))
+   #+END_SRC
+
+** Doom modeline
+   #+BEGIN_SRC emacs-lisp
+   (use-package doom-modeline
+     :ensure t
+     :hook (after-init . doom-modeline-mode))
+   #+END_SRC
+
+** All-the-icons
+   #+BEGIN_SRC emacs-lisp
+   (use-package all-the-icons
+     :ensure t)
+   #+END_SRC
+
+
+* Modes
+** C++ compile funtion and debugger
+   #+BEGIN_SRC emacs-lisp
+   (defun code-compile ()
+       (interactive)
+       (unless (file-exists-p "Makefile")
+           (set (make-local-variable 'compile-command)
+	   (let ((file (file-name-nondirectory buffer-file-name)))
+	       (format "%s -o %s %s"
+   	           (if  (equal (file-name-extension file) "cpp") "g++" "gcc" )
+		   (file-name-sans-extension file)
+		   file)))
+	(compile compile-command)))
+	(global-set-key [f9] 'code-compile)
+
+   #+END_SRC
+
+
+* General packages
+** Which-key
+   #+BEGIN_SRC emacs-lisp
+   (use-package which-key
+     :ensure t
+     :config (which-key-mode))
+   #+END_SRC
+
+** Projectile
+   #+BEGIN_SRC emacs-lisp
+   (use-package projectile
+     :ensure t
+     :config
+     (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
+     (projectile-mode +1))
+   #+END_SRC   
+
+** Dashboard
+   #+BEGIN_SRC emacs-lisp
+   (use-package dashboard
+     :ensure t
+     :init
+     (progn
+     (setq dashboard-items '((recents . 3)
+                            (projects . 3)))
+     (setq dashboard-startup-banner 'logo)
+     (setq dashboard-set-file-icons t)
+     (setq dashboard-set-heading-icons t)
+   )
+   :config
+   (dashboard-setup-startup-hook))
+   #+END_SRC
+
+** Treemacs
+   #+BEGIN_SRC emacs-lisp
+   (use-package treemacs
+     :ensure t
+     :bind
+     (:map global-map
+	([f8] . treemacs)
+	("C-<f8>". treemacs-select-wwindow))
+   :config
+   (progn
+   (setq treemacs-is-never-other-window t))
+   )
+   #+END_SRC
+
+** Treemacs-projectile
+   #+BEGIN_SRC emacs-lisp
+   (use-package treemacs-projectile
+     :after treemacs projectile
+     :ensure t)
+   #+END_SRC
+
+** Yasnippet
+   #+BEGIN_SRC emacs-lisp
+   (require 'yasnippet)
+   (yas-global-mode 1)
+   #+END_SRC
+
+** Auto-complete
+   #+BEGIN_SRC emacs-lisp
+   (use-package auto-complete
+     :ensure t
+     :init
+     (progn
+     (ac-config-default)
+     (global-auto-complete-mode t)
+     ))
+   #+END_SRC
+
+** Flycheck
+   #+BEGIN_SRC emacs-lisp
+   (use-package flycheck
+     :ensure t
+     :init
+     (global-flycheck-mode t)
+     )
+   #+END_SRC
+
+** Magit git client
+   #+BEGIN_SRC emacs-lisp
+   (use-package magit
+     :ensure t
+     :init
+     (progn
+     (bind-key "C-x g" 'magit-status)))
+   #+END_SRC
+
+** Syntax highlighting
+   #+BEGIN_SRC emacs-lisp
+   (use-package modern-cpp-font-lock
+     :ensure t)
+   #+END_SRC
