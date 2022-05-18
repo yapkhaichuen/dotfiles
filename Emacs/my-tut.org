@@ -39,7 +39,7 @@ My Config File
    (use-package doom-themes
      :ensure t
      :config
-     (load-theme 'doom-one))
+     (load-theme 'doom-vibrant))
    #+END_SRC
 
 ** Doom modeline
@@ -132,9 +132,9 @@ My Config File
    #+END_SRC
 
 ** Yasnippet
-   #+BEGIN_SRC emacs-lisp
-   (require 'yasnippet)
-   (yas-global-mode 1)
+   #+BEGIN_SRC emacs-lisp 
+   (use-package yasnippet
+     :ensure t)
    #+END_SRC
 
 ** Auto-complete
