@@ -1,125 +1,208 @@
-(setq inhibit-startup-message t)
 
-(tool-bar-mode -1)
+This is my Emacs config, there are many like it, but this is mine.
 
-(toggle-scroll-bar -1)
+* General Settings
+** Don't show startup message
+   #+BEGIN_SRC emacs-lisp
+   (setq inhibit-startup-message t)
+   #+END_SRC
 
-(show-paren-mode 1)
+** Don't show tool bar
+   #+BEGIN_SRC emacs-lisp
+   (tool-bar-mode -1)
+   #+END_SRC
 
-(setq ido-everywhere t)
-(ido-mode t)
+** Don't show scroll bar
+   #+BEGIN_SRC emacs-lisp
+   (toggle-scroll-bar -1)
+   #+END_SRC
 
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+** Show matching parenthesis
+   #+BEGIN_SRC emacs-lisp
+   (show-paren-mode 1)
+   #+END_SRC
 
-(setq-default initial-scratch-message nil)
+** Use IDO mode
+   #+BEGIN_SRC emacs-lisp
+   (setq ido-everywhere t)
+   (ido-mode t)
+   #+END_SRC
 
-(defalias 'yes-or-no-p 'y-or-n-p)
+** Display line numbers
+   #+BEGIN_SRC emacs-lisp
+   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+   #+END_SRC
 
-(setq user-full-name "Yap Khai Chuen"
-      user-real-login-name "Yap Khai Chuen"
-      user-login-name "Khai Chuen"
-      user-mail-address "khaichuen06@gmail.com")
+** Inhibit scratch buffer startup message
+   #+BEGIN_SRC emacs-lisp
+   (setq-default initial-scratch-message nil)
+   #+END_SRC
 
-(use-package doom-themes
-  :ensure t
-  :config
-  (load-theme 'doom-vibrant))
+** Y/N alias for yes/no
+   #+BEGIN_SRC emacs-lisp
+   (defalias 'yes-or-no-p 'y-or-n-p)
+   #+END_SRC
 
-(use-package doom-modeline
-  :ensure t
-  :hook (after-init . doom-modeline-mode))
 
-(display-time-mode t)
+* Personal information
+   #+BEGIN_SRC emacs-lisp
+   (setq user-full-name "Yap Khai Chuen"
+         user-real-login-name "Yap Khai Chuen"
+         user-login-name "Khai Chuen"
+	 user-mail-address "khaichuen06@gmail.com")
+   #+END_SRC
 
-(use-package all-the-icons
-  :ensure t)
 
-(defun code-compile ()
-    (interactive)
-    (unless (file-exists-p "Makefile")
-        (set (make-local-variable 'compile-command)
-	(let ((file (file-name-nondirectory buffer-file-name)))
-	    (format "%s -o %s %s"
-   	        (if  (equal (file-name-extension file) "cpp") "g++" "gcc" )
-		(file-name-sans-extension file)
-		file)))
-     (compile compile-command)))
-     (global-set-key [f9] 'code-compile)
+* UI
+** Doom themes - doom-one
+   #+BEGIN_SRC emacs-lisp
+   (use-package doom-themes
+     :ensure t
+     :config
+     (load-theme 'doom-vibrant))
+   #+END_SRC
 
-(use-package which-key
-  :ensure t
-  :config (which-key-mode))
+** Doom modeline
+   #+BEGIN_SRC emacs-lisp
+   (use-package doom-modeline
+     :ensure t
+     :hook (after-init . doom-modeline-mode))
+   
+   (display-time-mode t)
+   #+END_SRC
 
-(use-package projectile
-  :ensure t
-  :config
-  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
-  (projectile-mode +1))
+** All-the-icons
+   #+BEGIN_SRC emacs-lisp
+   (use-package all-the-icons
+     :ensure t)
+   #+END_SRC
 
-(use-package dashboard
-  :ensure t
-  :init
-  (progn
-  (setq dashboard-items '((recents . 3)
-                         (projects . 3)))
-  (setq dashboard-startup-banner 'logo)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-set-heading-icons t)
-)
-:config
-(dashboard-setup-startup-hook))
 
-(use-package treemacs
-  :ensure t
-  :bind
-  (:map global-map
-     ([f8] . treemacs)
-     ("C-<f8>". treemacs-select-wwindow))
-:config
-(progn
-(setq treemacs-is-never-other-window t))
-)
+* Modes
+** C++ compile funtion and debugger
+   #+BEGIN_SRC emacs-lisp
+   (defun code-compile ()
+       (interactive)
+       (unless (file-exists-p "Makefile")
+           (set (make-local-variable 'compile-command)
+	   (let ((file (file-name-nondirectory buffer-file-name)))
+	       (format "%s -o %s %s"
+   	           (if  (equal (file-name-extension file) "cpp") "g++" "gcc" )
+		   (file-name-sans-extension file)
+		   file)))
+	(compile compile-command)))
+	(global-set-key [f9] 'code-compile)
+   #+END_SRC
 
-(require 'treemacs-all-the-icons)
-(treemacs-load-theme "all-the-icons")
 
-(use-package treemacs-projectile
-  :after treemacs projectile
-  :ensure t)
+* General packages
+** Which-key
+   #+BEGIN_SRC emacs-lisp
+   (use-package which-key
+     :ensure t
+     :config (which-key-mode))
+   #+END_SRC
 
-(use-package yasnippet
-  :ensure t)
+** Projectile
+   #+BEGIN_SRC emacs-lisp
+   (use-package projectile
+     :ensure t
+     :config
+     (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
+     (projectile-mode +1))
+   #+END_SRC   
 
-(use-package auto-complete
-  :ensure t
-  :init
-  (progn
-  (ac-config-default)
-  (global-auto-complete-mode t)
-  ))
+** Dashboard
+   #+BEGIN_SRC emacs-lisp
+   (use-package dashboard
+     :ensure t
+     :init
+     (progn
+     (setq dashboard-items '((recents . 3)
+                            (projects . 3)))
+     (setq dashboard-startup-banner 'logo)
+     (setq dashboard-set-file-icons t)
+     (setq dashboard-set-heading-icons t)
+   )
+   :config
+   (dashboard-setup-startup-hook))
+   #+END_SRC
 
-(use-package flycheck
-  :ensure t
-  :init
-  (global-flycheck-mode t)
-  )
+** Treemacs
+   #+BEGIN_SRC emacs-lisp
+   (use-package treemacs
+     :ensure t
+     :bind
+     (:map global-map
+	([f8] . treemacs)
+	("C-<f8>". treemacs-select-wwindow))
+   :config
+   (progn
+   (setq treemacs-is-never-other-window t))
+   )
 
-(use-package magit
-  :ensure t
-  :init
-  (progn
-  (bind-key "C-x g" 'magit-status)))
+   (require 'treemacs-all-the-icons)
+   (treemacs-load-theme "all-the-icons")
+   #+END_SRC
 
-(use-package modern-cpp-font-lock
-  :ensure t)
+** Treemacs-projectile
+   #+BEGIN_SRC emacs-lisp
+   (use-package treemacs-projectile
+     :after treemacs projectile
+     :ensure t)
+   #+END_SRC
 
-(use-package centaur-tabs
-  :ensure t
-  :config
-    (setq centaur-tabs-set-bar 'over
-          centaur-tabs-set-icons t
-	  centaur-tabs-gray-out-icons 'buffer
-	  centaur-tabs-height 24
-	  centaur-tabs-set-modified-marker t
-	  centaur-tabs-modifier-marker "*")
-     (centaur-tabs-mode t))
+** Yasnippet
+   #+BEGIN_SRC emacs-lisp 
+   (use-package yasnippet
+     :ensure t)
+   #+END_SRC
+
+** Auto-complete
+   #+BEGIN_SRC emacs-lisp
+   (use-package auto-complete
+     :ensure t
+     :init
+     (progn
+     (ac-config-default)
+     (global-auto-complete-mode t)
+     ))
+   #+END_SRC
+
+** Flycheck
+   #+BEGIN_SRC emacs-lisp
+   (use-package flycheck
+     :ensure t
+     :init
+     (global-flycheck-mode t)
+     )
+   #+END_SRC
+
+** Magit git client
+   #+BEGIN_SRC emacs-lisp
+   (use-package magit
+     :ensure t
+     :init
+     (progn
+     (bind-key "C-x g" 'magit-status)))
+   #+END_SRC
+
+** Syntax highlighting
+   #+BEGIN_SRC emacs-lisp
+   (use-package modern-cpp-font-lock
+     :ensure t)
+   #+END_SRC
+
+** Centaur tabs
+   #+BEGIN_SRC emacs-lisp
+   (use-package centaur-tabs
+     :ensure t
+     :config
+       (setq centaur-tabs-set-bar 'over
+             centaur-tabs-set-icons t
+	     centaur-tabs-gray-out-icons 'buffer
+	     centaur-tabs-height 24
+	     centaur-tabs-set-modified-marker t
+	     centaur-tabs-modifier-marker "*")
+	(centaur-tabs-mode t))
+   #+END_SRC
